@@ -13,7 +13,7 @@ function base64UrlDecode(base64UrlStr) {
   return atob(base64);
 }
 
-export async function POST(request) {
+export async function GET(request) {
   const url = new URL(request.url);
   const oldurl = url.searchParams.get('url');
   
