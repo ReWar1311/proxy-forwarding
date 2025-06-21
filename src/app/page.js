@@ -79,13 +79,6 @@ export default function Home() {
                 <p>Add headers and query parameters with an easy-to-use interface</p>
               </div>
             </li>
-            <li>
-              <div className={styles.featureIcon}>🌙</div>
-              <div className={styles.featureContent}>
-                <h4>Dark Mode Support</h4>
-                <p>Built with full light and dark mode integration</p>
-              </div>
-            </li>
           </ul>
         </section>
         
@@ -109,7 +102,7 @@ export default function Home() {
       </main>
       
       <footer className={styles.footer}>
-        <p className={styles.copyright}>© 2023 Proxy Forwarding Server</p>
+        <p className={styles.copyright}>© {new Date().getFullYear()} Proxy Forwarding Server</p>
         <div className={styles.footerLinks}>
           <a
             href="https://github.com/rewar1311/proxy-forwarding-server"
@@ -118,7 +111,7 @@ export default function Home() {
           >
             <Image
               aria-hidden
-              src="/github.svg" 
+              src="https://github.githubassets.com/favicons/favicon-dark.svg"
               alt="GitHub"
               width={16}
               height={16}
@@ -146,7 +139,7 @@ export default function Home() {
           >
             <Image
               aria-hidden
-              src="/globe.svg"
+              src="/vercel.svg"
               alt="Next.js"
               width={16}
               height={16}
