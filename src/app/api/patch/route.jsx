@@ -21,6 +21,7 @@ export async function GET(request) {
     }
     
     const dataStr = base64UrlDecode(encodedData);
+    // console.log(dataStr);
     const data = JSON.parse(dataStr);
     
     const decodedUrl = data.url;
@@ -33,7 +34,7 @@ export async function GET(request) {
 
   try {
     const response = await fetch(decodedUrl, {
-      method: 'POST',
+      method: 'PATCH',
       headers: headersData,
       body: bodyData
     });

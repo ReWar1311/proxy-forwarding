@@ -33,22 +33,26 @@ export async function GET(request) {
 
   try {
     const response = await fetch(decodedUrl, {
-      method: 'POST',
+      method: 'DELETE',
       headers: headersData,
       body: bodyData
     });
     
+    // Create a new headers object without content-encoding
     const cleanHeaders = new Headers();
     response.headers.forEach((value, key) => {
+      // Skip content-encoding header to prevent decoding issues
       if (key.toLowerCase() !== 'content-encoding') {
         cleanHeaders.append(key, value);
       }
     });
     
+    // HTML
     const contentType = response.headers.get('content-type') || '';
     if (contentType.includes('text/html')) {
       const html = await response.text();
       
+      // Rewrite URLs
       const baseUrl = `${originalUrlObj.protocol}//${originalUrlObj.host}`;
       const modifiedHtml = html
         // Fix CSS links
@@ -74,6 +78,7 @@ export async function GET(request) {
       });
     }
     
+    // non-HTML 
     return new NextResponse(response.body, {
       status: response.status,
       statusText: response.statusText,

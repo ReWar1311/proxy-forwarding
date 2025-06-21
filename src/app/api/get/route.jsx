@@ -14,14 +14,16 @@ function base64UrlDecode(base64UrlStr) {
 }
 
 export async function GET(request) {
-  const url = new URL(request.url);
-  const oldurl = url.searchParams.get('url');
-  
-  if (!oldurl) {
-    return NextResponse.json({ error: 'URL parameter is required' }, { status: 400 });
+  const encodedData = request.nextUrl.searchParams.get('data');
+  if (!encodedData) {
+    return NextResponse.json({ error: 'Data parameter is required' }, { status: 400 });
   }
   
-  const decodedUrl = base64UrlDecode(oldurl);
+  const dataStr = base64UrlDecode(encodedData);
+  console.log(dataStr);
+  const data = JSON.parse(dataStr);
+  
+  const decodedUrl = data.url; 
   const originalUrlObj = new URL(decodedUrl);
 
   try {
@@ -32,10 +34,8 @@ export async function GET(request) {
       },
     });
     
-    // Create a new headers object without content-encoding
     const cleanHeaders = new Headers();
     response.headers.forEach((value, key) => {
-      // Skip content-encoding header to prevent decoding issues
       if (key.toLowerCase() !== 'content-encoding') {
         cleanHeaders.append(key, value);
       }
@@ -44,21 +44,22 @@ export async function GET(request) {
     // Check if the response is HTML
     const contentType = response.headers.get('content-type') || '';
     if (contentType.includes('text/html')) {
-      // Process HTML to rewrite URLs
       const html = await response.text();
       
-      // Rewrite URLs in the HTML
+      // Rewrite URLs
       const baseUrl = `${originalUrlObj.protocol}//${originalUrlObj.host}`;
       const modifiedHtml = html
         // Fix CSS links
         .replace(/href="(\/[^"]*)"/g, (match, p1) => {
           const absoluteUrl = new URL(p1, baseUrl).href;
-          return `href="/api/get?url=${base64UrlEncode(absoluteUrl)}"`;
+          const encodedData = base64UrlEncode(JSON.stringify({url: absoluteUrl}));
+          return `href="/api/get?data=${encodedData}"`;
         })
         // Fix JS sources
         .replace(/src="(\/[^"]*)"/g, (match, p1) => {
           const absoluteUrl = new URL(p1, baseUrl).href;
-          return `src="/api/get?url=${base64UrlEncode(absoluteUrl)}"`;
+          const encodedData = base64UrlEncode(JSON.stringify({url: absoluteUrl}));
+          return `src="/api/get?data=${encodedData}"`;
         })
         // Fix image sources
         .replace(/src="(\/[^"]*)"/g, (match, p1) => {
@@ -73,7 +74,7 @@ export async function GET(request) {
       });
     }
     
-    // For non-HTML responses, directly forward the response
+    // non-HTML
     return new NextResponse(response.body, {
       status: response.status,
       statusText: response.statusText,

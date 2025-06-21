@@ -33,7 +33,7 @@ export async function GET(request) {
 
   try {
     const response = await fetch(decodedUrl, {
-      method: 'POST',
+      method: 'PUT',
       headers: headersData,
       body: bodyData
     });
