@@ -2,7 +2,7 @@
 
 A powerful API proxy server that bypasses CORS restrictions and enables flexible request customization with headers, parameters, and authentication.
 
-**[🌐 Live Demo: https://proxy-forwarding-silk.vercel.app](https://proxy-forwarding-silk.vercel.app)**
+🌐 Live Demo: **[https://api-proxy.prashantrewar.app](https://api-proxy.prashantrewar.app)** 
 
 ![Proxy Forwarding Server](public/screenshot.png)
 
